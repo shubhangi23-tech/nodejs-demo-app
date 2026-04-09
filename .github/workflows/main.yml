@@ -1,0 +1,28 @@
+name: CI/CD for Node App
+
+# Ye pipeline tab chalegi jab aap 'main' branch pe code push karoge
+on:
+  push:
+    [cite_start]branches: [ "main" ] [cite: 14]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # GitHub se aapka code lene ke liye
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # DockerHub mein login karne ke liye
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Docker image banana aur use DockerHub pe bhejna
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          [cite_start]tags: ${{ secrets.DOCKERHUB_USERNAME }}/nodejs-demo-app:latest [cite: 11]
