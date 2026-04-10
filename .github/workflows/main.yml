@@ -1,28 +1,25 @@
-name: CI/CD for Node App
+name: My First DevOps Pipeline
 
-# Ye pipeline tab chalegi jab aap 'main' branch pe code push karoge
 on:
   push:
-    [cite_start]branches: [ "main" ] [cite: 14]
+    branches: [ "main" ] # Jab bhi main branch pe push ho
 
 jobs:
-  build-and-deploy:
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
-      # GitHub se aapka code lene ke liye
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      # DockerHub mein login karne ke liye
       - name: Login to DockerHub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Docker image banana aur use DockerHub pe bhejna
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v4
+      - name: Build and Push Image
+        uses: docker/build-push-action@v5
         with:
+          context: .
           push: true
-          [cite_start]tags: ${{ secrets.DOCKERHUB_USERNAME }}/nodejs-demo-app:latest [cite: 11]
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/nodejs-app:latest
